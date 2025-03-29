@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Chapter</title>
+    <style>
+        .flash-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 1;
+  animation: fadeOut 5s ease-out forwards; /* 5 seconds before disappearing */
+}
+
+
+.flash-message.success { background-color: #4CAF50; } 
+.flash-message.error { background-color: #F44336; } 
+lash-message.info { background-color: #2196F3; } 
+flash-message.warning { background-color: #ff9800; } 
+
+
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #00796b;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            text-align: left;
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s ease-in-out;
+        }
+
+        input:focus {
+            border-color: #00796b;
+            box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            width: 48%;
+            transition: 0.3s ease;
+        }
+
+        .save-btn {
+            background-color: #009688;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background-color: #00796b;
+        }
+
+        .cancel-btn {
+            background-color: #ff5252;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #d32f2f;
+        }
+        .flash-message{
+        padding: 10px;
+        justify-content: center;
+        margin-left: 50px auto;
+        
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+      }
+      
+        .success { background-color: #4CAF50; color: white; }
+        .error { background-color: #F44336; color: white; }
+        .info { background-color: #2196F3; color: white; }
+        .warning { background-color: #FF9800; color: white; }
+        .danger { background-color: #D32F2F; color: white; } 
+
+        
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+        <h2>New Subject</h2>
+        <form action="{{url_for('addchapter',subject_id=subject.id)}}" method="post">
+            <label for="chapter_name"> Chapter name:</label>
+            <input type="text" name="chapter_name" id="chapter_name" required>
+
+           
+           
+            <label for="number_of_questions">No.of Questions</label>
+            <input type="number" name="number_of_questions" id="number_of_questions" , required min="1">
+            <div class="buttons">
+                <button type="submit" class="save-btn">Save</button>
+                <button type="button" class="cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

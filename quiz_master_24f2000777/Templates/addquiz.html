@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Quiz</title>
+    <style>
+        .flash-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 1;
+  animation: fadeOut 5s ease-out forwards; /* 5 seconds before disappearing */
+}
+
+
+.flash-message.success { background-color: #4CAF50; } 
+.flash-message.error { background-color: #F44336; } 
+lash-message.info { background-color: #2196F3; } 
+flash-message.warning { background-color: #ff9800; } 
+
+
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #eef2f3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #2eb8bd, #1a9ea4);
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: row;
+            gap: 25px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .links a {
+            font-size: 16px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .add-quiz-heading {
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-left: 20px;
+        }
+
+        .delete-subject-container {
+            margin: 100px auto 40px;
+            width: 90%;
+            max-width: 600px;
+            padding: 25px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .delete-subject-container:hover {
+            transform: translateY(-3px);
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+            background-color: #f8f8f8;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            border-color: #2eb8bd;
+            outline: none;
+            background-color: white;
+        }
+
+        #addsubjectBtn {
+            background: linear-gradient(135deg, #2eb8bd, #1a9ea4);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        #addsubjectBtn:hover {
+            background: linear-gradient(135deg, #23888d, #147a80);
+            transform: scale(1.05);
+        }
+
+        /* Flash messages */
+        .flash-message {
+            padding: 12px;
+            margin: 10px auto;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .success { background-color: #4CAF50; color: white; }
+        .warning { background-color: #FF9800; color: white; }
+        .danger { background-color: #D32F2F; color: white; }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <nav class="links">
+            <a href="{{ url_for('summary') }}">Summary</a>
+            <a href="{{ url_for('home') }}">Logout</a>
+            <a href="{{ url_for('admin_dashboard') }}">Home</a>
+            <h2 class="add-quiz-heading">Add Quiz</h2>
+        </nav>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="delete-subject-container">
+        <form method="POST" class="add-quiz-form">
+            <select name="subject_id" required class="subject-dropdown">
+                <option value="">Select subject for quiz</option>
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="chapter_id" required id="chapter_id">
+                <option value="">Select chapter</option>
+                {% for chapter in chapters %}
+                    <option value="{{ chapter.id }}">{{ chapter.name }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="title" placeholder="Quiz Title" required>
+            <textarea name="description" placeholder="Quiz Description" rows="4" required></textarea>
+            <input type="text" name="number_of_questions" placeholder="Number of Questions" required>
+            <input type="text" name="duration" placeholder="Duration (minutes)" required>
+
+            <button type="submit" id="addsubjectBtn">Add Quiz</button>
+        </form>
+    </div>
+</body>
+</html>

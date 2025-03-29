@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e9f7fa;
+            color: #333;
+        }
+
+        nav {
+            background-color: #00796b;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            margin: 0 auto;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 20px;
+            font-size: 18px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+            transform: scale(1.1);
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            padding: 5px;
+            width: 250px;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-form select {
+            padding: 5px;
+            border-radius: 25px;
+            border: none;
+            font-size: 14px;
+            outline: none;
+            background-color: white;
+            color: #333;
+        }
+
+        .btn-primary {
+            background-color: #ffcc00;
+            border: none;
+            color: white;
+            border-radius: 25px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffb300;
+        }
+
+        .flash-message {
+            padding: 10px;
+            margin: 10px auto;
+            width: 80%;
+            text-align: center;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .flash-message.success { background-color: #4caf50; }
+        .flash-message.warning { background-color: #ff9800; }
+        .flash-message.info { background-color: #2196F3; }
+
+        .main-container {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 32px;
+            color: #00796b;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        h4, h5 {
+            color: #00796b;
+            margin: 15px 0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 90%;
+        }
+
+        li {
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li:hover {
+            background-color: #f1f1f1;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #00796b;
+            color: white;
+        }
+
+        td {
+            background-color: #ffffff;
+        }
+
+        td:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-action {
+            display: inline-block;
+            text-decoration: none;
+            padding: 6px 15px;
+            background-color: #00796b;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .btn-action:hover {
+            background-color: #004d40;
+        }
+
+        .welcome-msg {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-header {
+            font-size: 24px;
+            color: #00796b;
+            font-weight: 600;
+        }
+
+        .card-content {
+            font-size: 18px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <nav>
+        <div class="container">
+            <a href="{{ url_for('scores') }}">Scores</a>
+            <a href="{{ url_for('summary') }}">Summary</a>
+            <a href="{{ url_for('login') }}">Logout</a>
+            <form class="search-form" method="POST" action="{{ url_for('user_search') }}">
+                <select name="category" required>
+                    <option value="all">All</option>
+                    <option value="subject">Subjects</option>
+                    <option value="quiz">Quizzes</option>
+                </select>
+                <input type="text" name="query" placeholder="Search..." class="search-box" required>
+                <button type="submit" class="btn-primary">Search</button>
+            </form>
+            <div class="welcome-msg">Welcome, {{ fullname }}!</div>
+        </div>
+    </nav>
+
+    <div class="main-container animate__animated animate__fadeIn">
+       
+        {% if search_results.is_search %}
+            <h3>Search Results</h3>
+            <h4>Results for: "{{ search_results.query }}"</h4>
+            {% if search_results.subjects %}
+                <h5>Subjects</h5>
+                <ul>
+                    {% for subject in search_results.subjects %}
+                        <li>{{ subject.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if search_results.quizzes %}
+                <h5>Quizzes</h5>
+                <ul>
+                    {% for quiz in search_results.quizzes %}
+                        <li>{{ quiz.title }} - {{ quiz.description }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% else %}
+            <h3>Upcoming Quizzes</h3>
+            <div class="card">
+                <div class="card-header">
+                    Quiz Details
+                </div>
+                <div class="card-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Subjects</th>
+                                <th>Chapters</th>
+                                <th>No. of Questions</th>
+                                <th>Duration (min)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in quizzes %}
+                                <tr>
+                                    <td>{{ quiz.chapter.subject.name }}</td>
+                                    <td>{{ quiz.chapter.name if quiz.chapter else "N/A" }}</td>
+                                    <td>{{ quiz.number_of_questions }}</td>
+                                    <td>{{ quiz.duration }}</td>
+                                    <td>
+                                        <a href="{{ url_for('attempt_quiz', quiz_id=quiz.id) }}" class="btn-action">View</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Quiz</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+       .flash-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 1;
+  animation: fadeOut 5s ease-out forwards; 
+}
+
+
+.flash-message.success { background-color: #4CAF50; } 
+.flash-message.error { background-color: #F44336; } 
+lash-message.info { background-color: #2196F3; } 
+flash-message.warning { background-color: #ff9800; } 
+
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+    
+        question-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+       
+        h2 {
+    text-align: center;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+        
+        input[type="text"], select {
+            border-radius: 10px;
+            border: 2px solid #ff4b2b;
+            transition: all 0.3s ease-in-out;
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: #ff416c;
+            box-shadow: 0px 0px 10px rgba(255, 65, 108, 0.4);
+        }
+
+        
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0px 0px 15px rgba(255, 75, 43, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-3">Add a New Question</h2>
+        <form action="{{ url_for('add_question',quiz_id=quiz.id) }}" method="POST">
+            <div class="mb-3">
+                <label for="question" class="form-label">Question:</label>
+                <input type="text" class="form-control" id="question" name="question" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Options:</label>
+                <input type="text" class="form-control mb-2" name="option1" placeholder="Option 1" required>
+                <input type="text" class="form-control mb-2" name="option2" placeholder="Option 2" required>
+                <input type="text" class="form-control mb-2" name="option3" placeholder="Option 3" required>
+                <input type="text" class="form-control mb-2" name="option4" placeholder="Option 4" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="correct_answer" class="form-label">Correct Answer:</label>
+                <select class="form-select" id="correct_answer" name="correct_answer" required>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                    <option value="4">Option 4</option>
+                </select>
+            </div>
+            
+
+            <button type="submit" class="btn btn-primary">Add Question</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

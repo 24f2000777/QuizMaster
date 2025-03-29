@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <style>
+        .flash-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: auto;
+        }
+
+        .flash-message {
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            opacity: 1;
+            animation: fadeOut 5s ease-out forwards;
+        }
+
+        .flash-message.success { background-color: #4CAF50; }
+        .flash-message.error { background-color: #F44336; }
+        .flash-message.info { background-color: #2196F3; }
+        .flash-message.warning { background-color: #ff9800; }
+        .flash-message.danger { background-color: #D32F2F; }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #eef2f3;
+            font-family: "Arial", sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #009688, #00796b);
+            padding: 15px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .navbar .links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: 0.3s ease;
+        }
+
+        .navbar .links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar select {
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: none;
+            font-size: 14px;
+            outline: none;
+            background-color: white;
+            color: #333;
+        }
+
+        .navbar input[type="search"] {
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: none;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .navbar button {
+            background-color: #ff4081;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s ease;
+        }
+
+        .navbar button:hover {
+            background-color: #f50057;
+        }
+
+        .navbar span {
+            font-weight: bold;
+        }
+
+        .tables {
+            padding: 25px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            overflow-x: auto;
+        }
+
+        .tables h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #00796b;
+        }
+
+        .tables h4, .tables h5 {
+            text-align: center;
+            color: #00796b;
+        }
+
+        .tables ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tables li {
+            padding: 10px;
+            background: #fafafa;
+            border-bottom: 1px solid #ddd;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #1a73e8;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 3px solid #0056b3;
+        }
+
+        td {
+            background: #fafafa;
+            color: #555;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td button {
+            background-color: #4caf50;
+            color: white;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s ease;
+        }
+
+        td button:hover {
+            background-color: #45a049;
+        }
+
+        .tables button {
+            background-color: #ff4081;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.3s ease;
+            display: block;
+            width: 220px;
+            margin: 10px auto;
+        }
+
+        .tables button:hover {
+            background-color: #f50057;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+
+            .navbar .links {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .navbar form {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .navbar select, .navbar input[type="search"] {
+                margin-top: 8px;
+                width: 100%;
+            }
+
+            .navbar button {
+                width: 100%;
+            }
+
+            .tables {
+                padding: 18px;
+            }
+
+            .tables h2 {
+                font-size: 22px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            td button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .tables button {
+                width: 100%;
+                font-size: 14px;
+            }
+        }
+
+        #addsubjectBtn {
+            background-color: hsl(173, 100%, 24%);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            display: block;
+            transition: 0.3s ease;
+            width: 220px;
+            margin: 20px auto;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .delete-subject-container {
+            max-width: 220px;
+            margin: 20px auto;
+        }
+
+        .delete-subject-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .subject-dropdown {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #009688;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            background-color: white;
+            color: #333;
+        }
+
+        .delete-subject-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: 0.3s ease;
+            width: 100%;
+        }
+
+        .delete-subject-btn:hover {
+            background-color: #c82333;
+        }
+
+        @media(max-width:760px) {
+            .delete-subject-container {
+                width: 90%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="navbar">
+        <nav class="links">
+            <a href="{{url_for('quiz')}}">Quiz</a>
+            <a href="{{url_for('summary')}}">Summary</a>
+            <a href="{{url_for('home')}}">Logout</a>
+            <form action="{{ url_for('admin_search') }}" method="POST" class="d-flex align-items-center gap-2">
+                <select name="category" required>
+                    <option value="all">All</option>
+                    <option value="user">Users</option>
+                    <option value="subject">Subjects</option>
+                    <option value="quiz">Quizzes</option>
+                </select>
+                <input type="search" name="query" placeholder="Search..." required />
+                <button type="submit">Search</button>
+            </form>
+            <span>Welcome Admin</span>
+        </nav>
+    </div>
+
+    <!-- Search Results Section -->
+    {% if search_results.is_search %}
+        <div class="tables">
+            <h4>Search Results for: "{{ search_results.query }}"</h4>
+            {% if search_results.subjects %}
+                <h5>Subjects</h5>
+                <ul>
+                    {% for subject in search_results.subjects %}
+                        <li>{{ subject.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if search_results.quizzes %}
+                <h5>Quizzes</h5>
+                <ul>
+                    {% for quiz in search_results.quizzes %}
+                        <li>{{ quiz.title }} - {{ quiz.description }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if search_results.users %}
+                <h5>Users</h5>
+                <ul>
+                    {% for user in search_results.users %}
+                        <li>{{ user.fullname }} ({{ user.email }})</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div>
+        <form action="{{url_for('addSubject')}}" method="post">
+            <button id="addsubjectBtn">Add Subject</button>
+        </form>
+        <div class="delete-subject-container">
+            <form action="{{url_for('delete_subject')}}" method="POST" class="delete-subject-form">
+                <select name="subject_id" required class="subject-dropdown">
+                    <option value="">Select subject to delete</option>
+                    {% for subject in subjects %}
+                        <option value="{{subject.id}}">{{subject.name}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="delete-subject-btn">Delete subject</button>
+            </form>
+        </div>
+    </div>
+
+    {% for subject in subjects %}
+        <div class="tables">
+            <main>
+                <h2>{{subject.name}}</h2>
+                {% if subject.chapters %}
+                    {% for chapter in subject.chapters %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Chapter Name</th>
+                                    <th>Number of Questions</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{chapter.name}}</td>
+                                    <td>{{chapter.number_of_questions}}</td>
+                                    <td>
+                                        <form action="{{url_for('edit_chapter', id=chapter.id)}}" method="GET">
+                                            <button>Edit</button>
+                                        </form>
+                                        <form action="{{url_for('delete_chapter', id=chapter.id)}}" method="POST">
+                                            <button>Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    {% endfor %}
+                {% endif %}
+                <form action="{{url_for('addchapter', subject_id=subject.id)}}">
+                    <button>Add Chapter</button>
+                </form>
+            </main>
+        </div>
+    {% endfor %}
+</body>
+</html>

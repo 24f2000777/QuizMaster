@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Scores</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+       
+        body {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+
+       
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .table thead {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Back Button */
+        .btn-primary {
+            background: #ff7eb3;
+            border: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #ff477e;
+        }
+
+        /* Flash Messages */
+        .flash-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: auto;
+        }
+
+        .flash-message {
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            opacity: 1;
+            animation: fadeOut 5s ease-out forwards;
+        }
+
+        .flash-message.success { background-color: #4CAF50; }
+        .flash-message.error { background-color: #F44336; }
+        .flash-message.info { background-color: #2196F3; }
+        .flash-message.warning { background-color: #ff9800; }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Quiz Scores</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% if scores %}
+            <h3>All Quiz Attempts</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Quiz</th>
+                        <th>Score (%)</th>
+                        <th>Date</th>
+                        <th>Total Questions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for score in scores %}
+                        <tr>
+                            <td>{{ score.quiz_title }}</td>
+                            <td>{{ score.score }}%</td>
+                            <td>{{ score.date }}</td>
+                            <td>{{ score.total_questions }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">No scores available yet. Attempt some quizzes!</p>
+        {% endif %}
+
+        
+        {% if latest_quiz and latest_results %}
+            <div class="analysis-section">
+                <h3>Latest Quiz Analysis: {{ latest_quiz.title }}</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Marks (1/0)</th>
+                            <th>Correct Answer</th>
+                            <th>Your Answer</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in latest_results %}
+                            <tr class="question-result {{ 'correct' if result.correct else 'incorrect' }}">
+                                <td>{{ result.question }}</td>
+                                <td>{{ result.marks }}</td>
+                                <td>{{ result.correct_answer }}</td>
+                                <td>{{ result.user_answer or 'Not answered' }}</td>
+                                <td>{{ 'Correct' if result.correct else 'Incorrect' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('userDashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

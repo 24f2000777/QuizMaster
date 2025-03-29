@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Quiz Master</title>
+    <!-- Bootstrap Stylesheet -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <style>
+        .flash-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 1;
+  animation: fadeOut 5s ease-out forwards; /* 5 seconds before disappearing */
+}
+
+
+.flash-message.success { background-color: #4CAF50; } 
+.flash-message.error { background-color: #F44336; } 
+.flash-message.info { background-color: #2196F3; }
+.flash-message.warning { background-color: #ff9800; } 
+
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+        :root {
+            --main-color: #4A90E2;
+            --accent-color: #50E3C2;
+            --text-dark: #2C3E50;
+            --background-light: #ECF0F1;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--main-color), var(--accent-color));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signup-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control:focus {
+            border-color: var(--main-color);
+            box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25);
+        }
+
+        .btn-custom {
+            background-color: var(--main-color);
+            border: none;
+            padding: 12px;
+            transition: transform 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background-color: #357ABD;
+            transform: translateY(-2px);
+        }
+
+        .icon-input {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--main-color);
+        }
+
+        .link-text {
+            color: var(--text-dark);
+            transition: color 0.3s;
+        }
+
+        .link-text:hover {
+            color: var(--main-color);
+            text-decoration: none;
+        }
+        .flash-message{
+        padding: 10px;
+        justify-content: center;
+        margin-left: 50px auto;
+        
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+      }
+      
+        .success { background-color: #4CAF50; color: white; }
+        .error { background-color: #F44336; color: white; }
+        .info { background-color: #2196F3; color: white; }
+        .warning { background-color: #FF9800; color: white; }
+        .danger { background-color: #D32F2F; color: white; }
+
+    </style>
+
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="signup-box position-relative">
+                    <h2 class="text-center fw-bold mb-3">Sign Up</h2>
+                    <p class="text-center text-muted">Join Quiz Master and start exploring fun quizzes!</p>
+                    <form method="post">
+                        
+                        <div class="mb-3 position-relative">
+                            <i class="fas fa-user icon-input"></i>
+                            <input type="text" class="form-control ps-5" id="fullName" name="fullname" placeholder="Full Name" required>
+                        </div>
+                        
+                        <div class="mb-3 position-relative">
+                            <i class="fas fa-at icon-input"></i>
+                            <input type="email" class="form-control ps-5" id="email" name="email"placeholder="email" required>
+                        </div>
+                      
+                        <div class="mb-3 position-relative">
+                            <i class="fas fa-lock icon-input"></i>
+                            <input type="password" class="form-control ps-5" id="password" name="password" placeholder="Password" required>
+                        </div>
+                        
+                         <a href="{{url_for('login')}}">
+                            <button type="submit" class="btn btn-custom w-100 rounded-pill">Create Account</button>
+                         </a>
+                       
+                        
+                        <div class="text-center mt-3">
+                            <span class="text-muted">Already have an account?</span>
+                            <a href="{{url_for('login')}}" class="link-text fw-bold ms-1">Log In</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

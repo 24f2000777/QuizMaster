@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuizMaster - Test your knowledge</title>
+
+    <style>
+      .flash-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 1;
+  animation: fadeOut 5s ease-out forwards; /* 5 seconds before disappearing */
+}
+
+
+.flash-message.success { background-color: #4CAF50; } 
+.flash-message.error { background-color: #F44336; } 
+.flash-message.info { background-color: #2196F3; } 
+.flash-message.warning { background-color: #ff9800; } 
+
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(16, 34, 49, 0.949);
+        padding: 10px 20px;
+        box-sizing: border-box;
+      }
+      .logo h3 {
+        color: whitesmoke;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+        font-size: 40px;
+        margin: 0;
+      }
+      .links {
+        display: flex;
+        gap: 20px;
+      }
+      .links a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        font-family: Arial, sans-serif;
+      }
+      body {
+        margin: 0;
+        background-color: rgb(17, 32, 105);
+      }
+      footer {
+        text-align: center;
+        background-color: rgb(34, 111, 111);
+        padding: 50px;
+        font-size: x-large;
+        color: white;
+      }
+      button {
+        color: black;
+        background-color: aquamarine;
+        border-radius: 30px;
+        text-align: center;
+        padding: 15px;
+        margin-bottom: 100px;
+        font-size: 40px;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
+      section {
+        background-color: rgba(47, 102, 25, 0.351);
+        margin: 0;
+        text-align: center;
+      }
+      .main {
+        padding: 100px;
+      }
+      .main h2 {
+        color: beige;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        font-size: 100px;
+      }
+      .main pre {
+        color: aquamarine;
+        font-size: x-large;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">
+        <h3>Quiz Master</h3>
+      </div>
+      <div class="links">
+        <a href="{{url_for('login')}}">Login</a>
+        <a href="{{url_for('signup')}}">Sign Up</a>
+      </div>
+    </nav>
+    <section>
+      <div class="main">
+        <h2>Challenge Your Knowledge</h2>
+        <pre>
+Join millions of users worldwide in our exciting trivia challenges across various 
+categories!
+        </pre>
+      </div>
+      <div class="button">
+        <a href="{{ url_for('login') }}"> <button>Start Quiz Now</button></a>
+    </div>
+    </section>
+    <footer>© 2025 QuizMaster. All rights reserved.</footer>
+  </body>
+</html>

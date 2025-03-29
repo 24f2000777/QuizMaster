@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Question</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .flash-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 1;
+  animation: fadeOut 5s ease-out forwards; /* 5 seconds before disappearing */
+}
+
+
+.flash-message.success { background-color: #4CAF50; } 
+.flash-message.error { background-color: #F44336; }
+.flash-message.info { background-color: #2196F3; } 
+.flash-message.warning { background-color: #ff9800; } 
+
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            z-index: 1050;
+        }
+
+        .alert {
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 12px 20px;
+            text-align: center;
+        }
+
+        .alert-success { background: #28a745; color: white; }
+        .alert-danger { background: #dc3545; color: white; }
+        .alert-warning { background: #ffc107; color: #333; }
+        .alert-info { background: #17a2b8; color: white; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: #ff512f;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover { background: #dd2476; }
+
+        .btn-secondary, .btn-danger {
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <h2 class="text-center mb-4">Edit Question</h2>
+        
+    
+        <form action="{{ url_for('edit_question', quiz_id=quiz.id) }}" method="POST" class="mb-4">
+            <div class="mb-3">
+                <label for="question_number" class="form-label">Select Question Number:</label>
+                <select id="question_number" name="question_id" class="form-select">
+                    {% if quiz.questions %}
+                        {% for question in quiz.questions %}
+                            <option value="{{ question.id }}" {% if selected_question and question.id == selected_question.id %}selected{% endif %}>
+                                Question {{ loop.index }}
+                            </option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="" disabled selected>No questions available</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Load Question</button>
+            </div>
+        </form>
+
+       
+        {% if selected_question %}
+            <form action="{{ url_for('update_question', quiz_id=quiz.id, question_id=selected_question.id) }}" method="POST" class="mb-4">
+                <div class="mb-3">
+                    <label for="question_text" class="form-label">Edit Question:</label>
+                    <textarea id="question_text" name="question_text" class="form-control" rows="3">{{ selected_question.question_text }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Edit Options:</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="option_a" value="{{ selected_question.option_a }}" required>
+                        <div class="input-group-text">
+                            <input type="radio" name="correct_option" value="A" {% if selected_question.correct_answer == selected_question.option_a %}checked{% endif %} required>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="option_b" value="{{ selected_question.option_b }}" required>
+                        <div class="input-group-text">
+                            <input type="radio" name="correct_option" value="B" {% if selected_question.correct_answer == selected_question.option_b %}checked{% endif %}>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="option_c" value="{{ selected_question.option_c }}" required>
+                        <div class="input-group-text">
+                            <input type="radio" name="correct_option" value="C" {% if selected_question.correct_answer == selected_question.option_c %}checked{% endif %}>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="option_d" value="{{ selected_question.option_d }}" required>
+                        <div class="input-group-text">
+                            <input type="radio" name="correct_option" value="D" {% if selected_question.correct_answer == selected_question.option_d %}checked{% endif %}>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Update Question</button>
+                    <a href="{{ url_for('quiz') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+            
+            
+            <form action="{{ url_for('delete_question', quiz_id=quiz.id, question_id=selected_question.id) }}" method="POST" class="text-center">
+                <button type="submit" class="btn btn-danger">Delete Question</button>
+            </form>
+        {% else %}
+            <p class="text-center">No question selected. Please select a question above.</p>
+            <div class="text-center">
+                <a href="{{ url_for('quiz') }}" class="btn btn-secondary">Back to Quiz</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
