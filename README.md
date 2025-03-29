@@ -54,8 +54,4 @@ Ensure you have the following installed on your system:
 ## Contributing
 Feel free to fork the repository and submit pull requests with enhancements or bug fixes.
 
-## License
-This project is licensed under the MIT License.
 
-## Contact
-For any queries or issues, please reach out at [your-email@example.com].
